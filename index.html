@@ -394,6 +394,25 @@ from {
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.05);
 }
+/* ===== 이미지 확대 모달 ===== */
+#imageModal {
+    display: none;
+    position: fixed;
+    z-index: 10001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+}
+
+#imageModal img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+}
 
     </style>
 </head>
@@ -468,7 +487,8 @@ from {
             <h2>예식 안내</h2>
             <div class="info-box">
                 <div id="calendar"></div>
-<div id="dday"></div>
+                <div id="countdown"></div> 
+                <div id="dday"></div>
                 <p>
                   <div id="dday"></div>
 <div id="calendar"></div>
@@ -522,6 +542,9 @@ from {
                 </div>
             </div>
         </section>
+<div id="imageModal" onclick="closeModal()">
+    <img id="modalImg">
+</div>
 
         <!-- 푸터 -->
         <footer>
@@ -604,6 +627,7 @@ from {
 
         // 0.4초마다 꽃잎 생성 함수 실행 (너무 많으면 성능 저하되므로 적절히 조절)
         setInterval(createPetal, 400); 
+        
 const weddingDate = new Date("2026-05-23T15:00:00");
 const today = new Date();
 const diff = weddingDate - today;
@@ -625,6 +649,10 @@ function generateCalendar(date) {
     let calendarHTML = `
         <div style="margin-bottom:10px; font-size:1.1rem; font-weight:600;">
             ${year}. ${month + 1}. ${weddingDay}
+            <br>
+<span style="font-size:0.9rem; font-weight:400; color:#777;">
+오후 3시
+</span>
         </div>
         <table style="width:100%; border-collapse:collapse; text-align:center; font-size:0.9rem;">
             <thead>
@@ -678,6 +706,34 @@ function generateCalendar(date) {
 }
 
 generateCalendar(weddingDate);
+function updateCountdown() {
+    const now = new Date();
+    const gap = weddingDate - now;
+
+    if (gap <= 0) {
+        document.getElementById("countdown").innerHTML =
+            "<div style='margin-bottom:15px;'>💐 오늘입니다</div>";
+        return;
+    }
+
+    const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((gap / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((gap / (1000 * 60)) % 60);
+    const seconds = Math.floor((gap / 1000) % 60);
+
+    document.getElementById("countdown").innerHTML =
+        `<div style="
+            font-size:0.95rem;
+            margin-bottom:20px;
+            color:#666;
+            letter-spacing:1px;
+        ">
+            ${days}일 ${hours}시간 ${minutes}분 ${seconds}초
+        </div>`;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
         
 /* ===== 음악 자동 재생 보완 ===== */
@@ -696,12 +752,27 @@ function toggleMusic() {
     const audio = document.getElementById("bgm");
     audio.muted = !audio.muted;
 }
+// 갤러리 클릭 이벤트 연결
+document.querySelectorAll(".gallery-item img").forEach(img => {
+    img.addEventListener("click", function() {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
+
+        modal.style.display = "flex";
+        modalImg.src = this.src;
+    });
+});
+
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}
 
     </script>
 
 </body>
 
 </html>
+
 
 
 
