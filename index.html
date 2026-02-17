@@ -387,6 +387,13 @@ from {
     right: -60px;
     border-left: none;
 }
+#calendar {
+    margin-top: 10px;
+    padding: 20px;
+    background: #fafafa;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
 
     </style>
 </head>
@@ -511,7 +518,7 @@ from {
     <img src="images/background (4).jpg" alt="웨딩사진4">
 </div>
 <div class="gallery-item">
-    <img src="images/background (5).jpg" alt="웨딩사진5">
+    <img src="images/main.jpg" alt="웨딩사진5">
                 </div>
             </div>
         </section>
@@ -597,19 +604,82 @@ from {
 
         // 0.4초마다 꽃잎 생성 함수 실행 (너무 많으면 성능 저하되므로 적절히 조절)
         setInterval(createPetal, 400); 
-       const weddingDate = new Date("2026-05-23T15:00:00");
+const weddingDate = new Date("2026-05-23T15:00:00");
 const today = new Date();
 const diff = weddingDate - today;
 const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
 
 document.getElementById("dday").innerHTML =
-    "<div style='font-size:1.2rem; margin-bottom:10px;'>💍 D-" + days + "</div>";
+    "<div style='font-size:1.3rem; margin-bottom:15px; font-weight:600;'>💍 D-" + days + "</div>";
 
-const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-document.getElementById("calendar").innerHTML =
-    "<div style='font-size:1rem;'>" +
-    weddingDate.toLocaleDateString('ko-KR', options) +
-    " 오후 3시</div>";
+function generateCalendar(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const weddingDay = date.getDate();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+
+    let calendarHTML = `
+        <div style="margin-bottom:10px; font-size:1.1rem; font-weight:600;">
+            ${year}. ${month + 1}. ${weddingDay}
+        </div>
+        <table style="width:100%; border-collapse:collapse; text-align:center; font-size:0.9rem;">
+            <thead>
+                <tr>
+    `;
+
+    weekDays.forEach(day => {
+        let color = (day === "일") ? "#e57373" : (day === "토") ? "#64b5f6" : "#555";
+        calendarHTML += `<th style="padding:6px; color:${color};">${day}</th>`;
+    });
+
+    calendarHTML += "</tr></thead><tbody><tr>";
+
+    let dayCount = 0;
+
+    for (let i = 0; i < firstDay; i++) {
+        calendarHTML += "<td></td>";
+        dayCount++;
+    }
+
+    for (let d = 1; d <= lastDate; d++) {
+        let isWedding = (d === weddingDay);
+
+        calendarHTML += `
+            <td style="padding:8px; position:relative;">
+                ${isWedding
+                    ? `<div style="
+                        width:28px;
+                        height:28px;
+                        margin:auto;
+                        border:2px solid #ff8a80;
+                        border-radius:50%;
+                        line-height:24px;
+                        font-weight:600;
+                        color:#ff5252;
+                    ">${d}</div>`
+                    : d}
+            </td>
+        `;
+
+        dayCount++;
+
+        if (dayCount % 7 === 0) {
+            calendarHTML += "</tr><tr>";
+        }
+    }
+
+    calendarHTML += "</tr></tbody></table>";
+
+    document.getElementById("calendar").innerHTML = calendarHTML;
+}
+
+generateCalendar(weddingDate);
+
+        
 /* ===== 음악 자동 재생 보완 ===== */
 const audio = document.getElementById("bgm");
 
@@ -632,6 +702,7 @@ function toggleMusic() {
 </body>
 
 </html>
+
 
 
 
