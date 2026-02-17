@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모바일 청첩장</title>
+    <!-- 폰트 적용 (구글 폰트: Noto Serif KR - 감성적인 명조체) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#ffeff3">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* 
+         * [CSS 스타일 정의]
+         * 전체 디자인, 레이아웃, 애니메이션 효과를 담당합니다.
+         */
+
+        /* 변수 설정: 색상 변경 시 여기만 수정하면 전체 적용됨 */
+        :root {
+            --primary-color: #E9E9E5;
+            /* 연한 핑크 배경 */
+            --point-color: #788374;
+            /* 진한 핑크 포인트 */
+            --text-color: #555;
+            /* 기본 글자색 */
+            --bg-white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Serif KR', serif;
+            /* 감성적인 폰트 적용 */
+            background-color: #f7f7f7;
+            /* 배경: 회색 톤 */
+            color: var(--text-color);
+            line-height: 1.8;
+            overflow-x: hidden;
+            /* 가로 스크롤 방지 */
+        }
+
+        /* 메인 컨테이너: 모바일 화면처럼 중앙 정렬 */
+        .container {
+            max-width: 480px;
+            /* 모바일 너비 제한 */
+            margin: 0 auto;
+            background-color: var(--bg-white);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* 
+         * 1. 벚꽃(꽃잎) 애니메이션 스타일 
+         */
+        #petal-container {
+            position: fixed;
+            /* 화면에 고정 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* 클릭 통과 */
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background-color: var(--point-color);
+            border-radius: 150% 0 150% 0;
+            /* 꽃잎 모양 */
+            opacity: 0.8;
+            animation: fall linear forwards;
+        }
+
+        /* 꽃잎 떨어지는 키프레임 (위에서 아래로) */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(110vh) translateX(20px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 
+         * 2. 스크롤 애니메이션 (서서히 나타나기)
+         */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 섹션 공통 스타일 */
+        section {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--point-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 10px;
+            word-break: keep-all;
+            /* 단어 단위 줄바꿈 */
+        }
+
+        /* 헤더 (메인 사진) */
+        header {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            /* 높이 설정 */
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* [수정 포인트 1] 메인 이미지 배경 설정 */
+        .main-img {
+            /* // 여기 수정: 메인 사진 경로로 변경하세요 (예: images/main.jpg) */
+            /* 현재는 배경색과 텍스트로 대체함 */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 실제 이미지를 쓸 경우 아래 background 속성을 변경하세요 */
+            background: linear-gradient(rgba(233, 238, 229, 0.3), rgba(233, 238, 229, 0.3)), url('gallery/KakaoTalk_20260217_173215927.jpg') no-repeat center/cover;
+            background-size: cover;
+            z-index: 1;
+        }
+
+        .title-overlay {
+            position: relative;
+            z-index: 2;
+            /* 이미지보다 위에 표시 */
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px 30px;
+            border: 1px solid var(--point-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+        }
+
+        .title-overlay h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .title-overlay span {
+            display: block;
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* 인사말 그리팅 영역 */
+        .greeting {
+            background-color: #fff;
+        }
+
+        /* 정보 박스 스타일 */
+        .info-box {
+            background-color: var(--primary-color);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 지도 영역 */
+        #map {
+            width: 100%;
+            height: 300px;
+            background-color: #eee;
+            /* 지도 로드 전 회색 배경 */
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            border-radius: 5px;
+        }
+
+        /* 갤러리 (그리드 레이아웃) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 2열 배치 */
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            width: 100%;
+            height: 200px;
+            /* 사진 높이 */
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item img:hover {
+            transform: scale(1.05);
+            /* 마우스 오버 시 확대 */
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: #f9f9f9;
+            color: #888;
+            padding: 40px 20px;
+            font-size: 0.8rem;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+
+        /* 모바일이 아닌 화면 (PC 등)에서는 배경을 어둡게 처리하여 중앙 집중 효과 */
+        @media (min-width: 481px) {
+            body {
+                background-color: #333;
+                /* 어두운 배경 */
+                display: flex;
+                justify-content: center;
+            }
+
+            .container {
+                width: 480px;
+                /* 고정 너비 */
+            }
+
+            #petal-container {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 480px;
+                /* 꽃잎도 컨테이너 안에서만 떨어지게 */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+      JavaScript로 동적으로 생성되는 꽃잎들이 들어갈 컨테이너입니다.
+      모바일 청첩장의 로맨틱한 분위기를 연출합니다.
+    -->
+    <div id="petal-container"></div>
+
+    <div class="container">
+        <!-- 1. 메인 헤더 & 사진 -->
+        <header>
+            <div class="main-img">
+                <!-- 실제 이미지가 있다면 CSS 배경이나 img 태그로 변경 가능 -->
+            </div>
+            <div class="title-overlay reveal">
+                <!-- // 여기 수정: 신랑 신부 이름을 넣어주세요 -->
+                <h1>김희윤 & 김슬기</h1>
+                <span>서로의 인연이 되어<br>평생을 함께하려 합니다.</span>
+            </div>
+        </header>
+
+        <!-- 2. 인사말 섹션 -->
+        <section class="greeting reveal">
+            <h2>WEDDING INVITATION</h2>
+            <p>
+                <!-- // 여기 수정: 감동적인 초대 문구 -->
+                두 사람이 함께 걸어갈 인생의 첫걸음을 내딛습니다.<br>
+                서로의 동반자가 되어 맞잡은 손 위에<br>
+                사랑과 믿음을 쌓아가고자 합니다.<br>
+                <br>
+                소중한 분들과 마음을 나누는 이 뜻깊은 날,<br>
+                저희의 시작을 따뜻한 축복으로 함께해 주신다면<br>
+                그보다 더 큰 기쁨과 감사는 없을 것입니다.<br>
+                <br>
+                바쁘시더라도 귀한 걸음으로 자리해 주셔서<br>
+                저희의 새로운 출발을 빛내 주시면 감사드리겠습니다.
+            </p>
+            <br>
+            <p style="font-size: 1.1rem;">
+                <!-- // 여기 수정: 혼주 정보 및 신랑신부 이름 -->
+                <strong>김학수 · 윤미애</strong> 의 장남 <strong>HeeYoon</strong><br>
+                <strong>김준표 · 나영희</strong> 의 장녀 <strong>Seul Ki</strong>
+            </p>
+        </section>
+
+        <!-- 3. 예식 정보 섹션 -->
+        <section class="info reveal">
+            <h2>예식 안내</h2>
+            <div class="info-box">
+                <p>
+                    <strong>일시</strong><br>
+                    2026년 05월 23일 토요일 오후 3시
+                </p>
+                <br>
+                <div style="width: 100%; height: 1px; background: #fff; margin: 10px 0; opacity: 0.5;"></div>
+                <br>
+                <p>
+                    <strong>장소</strong><br>
+                    아이벡스컨벤션 주소: 경기 광명시 양지로 17 AK플라자 광명점 5층
+                </p>
+            </div>
+        </section>
+
+        <!-- 4. 오시는 길 (지도) -->
+        <section class="map reveal">
+            <h2>오시는 길</h2>
+            <p>아이벡스컨벤션 주소: 경기 광명시 양지로 17 AK플라자 광명점 5층</p>
+
+            <!-- 지도 영역 (placeholder) -->
+            <div id="map">
+                <!-- // 여기 수정: 나중에 카카오맵 스크립트를 이곳에 넣으시면 됩니다. -->
+                <span style="font-size: 0.9rem;">지도 영역 (카카오맵 API 연동 예정)</span>
+            </div>
+            <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">
+                * 주차 공간이 협소할 수 있으니 대중교통 이용을 권장합니다.
+            </p>
+        </section>
+
+        <!-- 5. 갤러리 -->
+        <section class="gallery reveal">
+            <h2>갤러리</h2>
+            <div class="gallery-grid">
+                <!-- // 여기 수정: gallery 폴더에 사진을 넣고 이름을 일치시키세요 -->
+                <!-- 예: gallery/photo1.jpg, gallery/photo2.jpg ... -->
+                <!-- 사진 비율이 달라도 object-fit: cover 속성 덕분에 잘 맞게 보입니다. -->
+
+                <div class="gallery-item">
+                    <img src="gallery/KakaoTalk_20260217_173215927.jpg"
+                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+1'" alt="웨딩사진1">
+                </div>
+                <div class="gallery-item">
+                    <img src="gallery/KakaoTalk_20260217_173215927_01.jpg"
+                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+2'" alt="웨딩사진2">
+                </div>
+                <div class="gallery-item">
+                    <img src="gallery/KakaoTalk_20260217_173215927_02.jpg"
+                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+3'" alt="웨딩사진3">
+                </div>
+                <div class="gallery-item">
+                    <img src="gallery/KakaoTalk_20260217_173215927_03.jpg"
+                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+4'" alt="웨딩사진4">
+                </div>
+                <div class="gallery-item">
+                    <img src="gallery/KakaoTalk_20260217_173215927_04.jpg"
+                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+5'" alt="웨딩사진5">
+                </div>
+            </div>
+        </section>
+
+        <!-- 푸터 -->
+        <footer>
+            <div style="margin-bottom: 10px;">
+                <!-- // 여기 수정: 연락처 등 -->
+                신랑에게 연락하기: 010-9820-8088<br>
+                신부에게 연락하기: 010-2730-4198
+            </div>
+            <p>© 2026 K & K Wedding Invitation</p>
+        </footer>
+    </div>
+
+    <!-- 
+     * [자바스크립트 기능 구현]
+     * 1. 스크롤 애니메이션 (Intersection Observer 사용)
+     * 2. 꽃잎 떨어지는 애니메이션 생성 및 제어
+     * 3. 서비스 워커 등록 (PWA)
+     -->
+    <script>
+        // PWA 서비스 워커 등록
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Service Worker Registered!', reg))
+                    .catch((err) => console.log('Service Worker Failed', err));
+            });
+        }
+        // 1. 스크롤 애니메이션: 화면에 요소가 보이면 .active 클래스 추가하여 애니메이션 실행
+        document.addEventListener("DOMContentLoaded", function () {
+            // .reveal 클래스를 가진 모든 요소를 찾습니다.
+            const reveals = document.querySelectorAll(".reveal");
+
+            // IntersectionObserver 생성: 요소가 화면에 나타나는지 감시하는 브라우저 API
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    // 요소가 화면에 보이면 (isIntersecting)
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active"); // .active 클래스 추가 -> CSS에서 opacity 1로 변경
+                    }
+                });
+            }, {
+                threshold: 0.15 // 요소가 15% 정도 보이면 애니메이션 시작
+            });
+
+            // 모든 .reveal 요소에 대해 감시 시작
+            reveals.forEach((element) => {
+                observer.observe(element);
+            });
+        });
+
+        // 2. 벚꽃(꽃잎) 애니메이션 기능
+        function createPetal() {
+            const container = document.getElementById("petal-container");
+            const petal = document.createElement("div"); // 새로운 div 생성
+            petal.classList.add("petal"); // class="petal" 추가
+
+            // 랜덤 값 설정: 시작 위치(left), 크기(size), 떨어지는 시간(duration)
+            const startLeft = Math.random() * window.innerWidth;
+            const size = Math.random() * 8 + 6; // 6px ~ 14px 크기
+            const duration = Math.random() * 3 + 4; // 4초 ~ 7초 동안 떨어짐
+
+            // CSS 스타일 적용
+            petal.style.left = startLeft + "px";
+            petal.style.width = size + "px";
+            petal.style.height = size + "px";
+            petal.style.animationDuration = duration + "s";
+
+            // 색상 랜덤 (연핑크, 약간 진한 핑크, 흰색 섞음)
+            const colors = ['#ffeff3', '#ffc1cc', '#ffdbe4'];
+            petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // 컨테이너에 꽃잎 추가
+            container.appendChild(petal);
+
+            // 애니메이션 시간이 지나면 요소 제거 (메모리 누수 방지)
+            setTimeout(() => {
+                petal.remove();
+            }, duration * 1000); // 초 단위를 밀리초로 변환
+        }
+
+        // 0.4초마다 꽃잎 생성 함수 실행 (너무 많으면 성능 저하되므로 적절히 조절)
+        setInterval(createPetal, 400); 
+    </script>
+
+</body>
+
+</html>
