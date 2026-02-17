@@ -173,30 +173,36 @@ from {
         }
 
         .title-overlay {
-            position: relative;
-            z-index: 2;
-            /* 이미지보다 위에 표시 */
-            text-align: center;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 40px 30px;
-            border: 1px solid var(--point-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border-radius: 5px;
-        }
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    background: white;
+    padding: 50px 40px;
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: 2px solid #e8cfcf;
+}
 
-        .title-overlay h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: #333;
-            font-weight: 600;
-        }
+.title-overlay::before {
+    content: "❀";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    color: #d4a5a5;
+}
 
-        .title-overlay span {
-            display: block;
-            margin-top: 10px;
-            font-size: 1rem;
-            color: #666;
-        }
+.title-overlay h1 {
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+}
+
+.title-overlay span {
+    font-size: 0.95rem;
+    color: #777;
+}
+
 
         /* 인사말 그리팅 영역 */
         .greeting {
@@ -211,6 +217,11 @@ from {
             margin-top: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
+.phone-btn {
+    margin-left:6px;
+    text-decoration:none;
+    font-size:0.9rem;
+}
 
         /* 지도 영역 */
         #map {
@@ -347,20 +358,20 @@ from {
         }
         /* ===== 음악 버튼 ===== */
 .music-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    background: rgba(0,0,0,0.6);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 36px;
+    height: 36px;
+    background: rgba(0,0,0,0.5);
     color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
-    z-index: 10000;
+    z-index: 5;
 }
 .title-overlay {
     position: relative;
@@ -422,25 +433,21 @@ from {
     
   <source src="music.mp3" type="audio/mpeg">
 </audio>
-    <div class="music-toggle" onclick="toggleMusic()">♪</div>
-
-    <!-- 
-      JavaScript로 동적으로 생성되는 꽃잎들이 들어갈 컨테이너입니다.
-      모바일 청첩장의 로맨틱한 분위기를 연출합니다.
-    -->
+    
     <div id="petal-container"></div>
 
     <div class="container">
         <!-- 1. 메인 헤더 & 사진 -->
         <header>
             <div class="main-img">
-                <!-- 실제 이미지가 있다면 CSS 배경이나 img 태그로 변경 가능 -->
+                
+    <div class="music-toggle" onclick="toggleMusic()">♪</div>
             </div>
         </header>
         <!--1.5. 정보박스 -->
          <div class="title-overlay reveal">
                 <!-- // 여기 수정: 신랑 신부 이름을 넣어주세요 -->
-                <h1>김희윤 & 김슬기</h1>
+                <h1>김희윤 <span style="color:#e57373;">♥</span> 김슬기</h1>
                 <span>서로의 인연이 되어<br>평생을 함께하려 합니다.</span>
             </div>
         <!-- 2. 인사말 섹션 -->
@@ -477,7 +484,15 @@ from {
     </div>
     <div class="line"></div>
     <div class="couple">
-        김희윤 & 김슬기
+      <span>
+        김희윤
+        <a href="tel:01098208088" class="phone-btn">📞</a>
+    </span>
+    &
+    <span>
+        김슬기
+        <a href="tel:01027304198" class="phone-btn">📞</a>
+    </span>
     </div>
 </div>
         </section>
@@ -521,11 +536,7 @@ from {
         <section class="gallery reveal">
             <h2>갤러리</h2>
             <div class="gallery-grid">
-                <!-- // 여기 수정: gallery 폴더에 사진을 넣고 이름을 일치시키세요 -->
-                <!-- 예: gallery/photo1.jpg, gallery/photo2.jpg ... -->
-                <!-- 사진 비율이 달라도 object-fit: cover 속성 덕분에 잘 맞게 보입니다. -->
-
-                <div class="gallery-item">
+                            <div class="gallery-item">
     <img src="images/background (1).jpg" alt="웨딩사진1">
 </div>
 <div class="gallery-item">
@@ -548,12 +559,7 @@ from {
 
         <!-- 푸터 -->
         <footer>
-            <div style="margin-bottom: 10px;">
-                <!-- // 여기 수정: 연락처 등 -->
-                신랑에게 연락하기: 010-9820-8088<br>
-                신부에게 연락하기: 010-2730-4198
-            </div>
-            <p>© 2026 K & K Wedding Invitation</p>
+                
         </footer>
     </div>
 
@@ -772,6 +778,7 @@ function closeModal() {
 </body>
 
 </html>
+
 
 
 
