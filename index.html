@@ -289,6 +289,30 @@ from {
     text-decoration: none;
     font-size: 1.2rem;
 }
+        .family-chart {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.parents {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.95rem;
+}
+
+.line {
+    width: 2px;
+    height: 30px;
+    background: var(--point-color);
+    margin: 10px auto;
+}
+
+.couple {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--point-color);
+}
+
 #calendar {
     margin-top: 20px;
     font-size: 0.9rem;
@@ -321,13 +345,59 @@ from {
                 /* 꽃잎도 컨테이너 안에서만 떨어지게 */
             }
         }
+        /* ===== 음악 버튼 ===== */
+.music-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10000;
+}
+.title-overlay {
+    position: relative;
+}
+
+.title-overlay::before,
+.title-overlay::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--point-color);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.title-overlay::before {
+    left: -60px;
+    border-right: none;
+}
+
+.title-overlay::after {
+    right: -60px;
+    border-left: none;
+}
+
     </style>
 </head>
 
 <body>
 <audio id="bgm" loop>
+    
   <source src="music.mp3" type="audio/mpeg">
 </audio>
+    <div class="music-toggle" onclick="toggleMusic()">♪</div>
+
     <!-- 
       JavaScript로 동적으로 생성되는 꽃잎들이 들어갈 컨테이너입니다.
       모바일 청첩장의 로맨틱한 분위기를 연출합니다.
@@ -374,7 +444,16 @@ from {
     </div>
                
 </section>
-<p style="font-size: 1.1rem;"> <strong>김학수 · 윤미애</strong> 의 장남 <strong>김희윤</strong><br> <strong>김준표 · 나영희</strong> 의 장녀 <strong>김슬기</strong> </p>
+<div class="family-chart">
+    <div class="parents">
+        <div>김학수 · 윤미애</div>
+        <div>김준표 · 나영희</div>
+    </div>
+    <div class="line"></div>
+    <div class="couple">
+        김희윤 & 김슬기
+    </div>
+</div>
         </section>
 
         <!-- 3. 예식 정보 섹션 -->
@@ -384,8 +463,9 @@ from {
                 <div id="calendar"></div>
 <div id="dday"></div>
                 <p>
-                    <strong>일시</strong><br>
-                    2026년 05월 23일 토요일 오후 3시
+                  <div id="dday"></div>
+<div id="calendar"></div>
+
                 </p>
                 <br>
                 <div style="width: 100%; height: 1px; background: #fff; margin: 10px 0; opacity: 0.5;"></div>
@@ -419,24 +499,19 @@ from {
                 <!-- 사진 비율이 달라도 object-fit: cover 속성 덕분에 잘 맞게 보입니다. -->
 
                 <div class="gallery-item">
-                    <img src="gallery/KakaoTalk_20260217_173215927.jpg"
-                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+1'" alt="웨딩사진1">
-                </div>
-                <div class="gallery-item">
-                    <img src="gallery/KakaoTalk_20260217_173215927_01.jpg"
-                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+2'" alt="웨딩사진2">
-                </div>
-                <div class="gallery-item">
-                    <img src="gallery/KakaoTalk_20260217_173215927_02.jpg"
-                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+3'" alt="웨딩사진3">
-                </div>
-                <div class="gallery-item">
-                    <img src="gallery/KakaoTalk_20260217_173215927_03.jpg"
-                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+4'" alt="웨딩사진4">
-                </div>
-                <div class="gallery-item">
-                    <img src="gallery/KakaoTalk_20260217_173215927_04.jpg"
-                        onerror="this.src='https://placehold.co/300x300/eee/aaa?text=Photo+5'" alt="웨딩사진5">
+    <img src="images/background (1).jpg" alt="웨딩사진1">
+</div>
+<div class="gallery-item">
+    <img src="images/background (2).jpg" alt="웨딩사진2">
+</div>
+<div class="gallery-item">
+    <img src="images/background (3).jpg" alt="웨딩사진3">
+</div>
+<div class="gallery-item">
+    <img src="images/background (4).jpg" alt="웨딩사진4">
+</div>
+<div class="gallery-item">
+    <img src="images/background (5).jpg" alt="웨딩사진5">
                 </div>
             </div>
         </section>
@@ -522,13 +597,19 @@ from {
 
         // 0.4초마다 꽃잎 생성 함수 실행 (너무 많으면 성능 저하되므로 적절히 조절)
         setInterval(createPetal, 400); 
-        const weddingDate = new Date("2026-05-23T15:00:00");
+       const weddingDate = new Date("2026-05-23T15:00:00");
 const today = new Date();
 const diff = weddingDate - today;
 const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
 
-document.getElementById("dday").innerText = "💍 D-" + days;
-        
+document.getElementById("dday").innerHTML =
+    "<div style='font-size:1.2rem; margin-bottom:10px;'>💍 D-" + days + "</div>";
+
+const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+document.getElementById("calendar").innerHTML =
+    "<div style='font-size:1rem;'>" +
+    weddingDate.toLocaleDateString('ko-KR', options) +
+    " 오후 3시</div>";
 /* ===== 음악 자동 재생 보완 ===== */
 const audio = document.getElementById("bgm");
 
@@ -541,12 +622,17 @@ window.addEventListener("load", function () {
 document.addEventListener("click", function () {
   audio.play();
 });
+function toggleMusic() {
+    const audio = document.getElementById("bgm");
+    audio.muted = !audio.muted;
+}
 
     </script>
 
 </body>
 
 </html>
+
 
 
 
