@@ -42,6 +42,16 @@
             overflow-x: hidden;
             /* 가로 스크롤 방지 */
         }
+        .main-img {
+            opacity: 0;
+            animation: fadeInMain 2s ease forwards;
+        }
+
+        @keyframes fadeInMain {
+            to {
+                opacity: 1;
+            }
+        }
 
         /* 메인 컨테이너: 모바일 화면처럼 중앙 정렬 */
         .container {
@@ -133,7 +143,8 @@
         header {
             position: relative;
             width: 100%;
-            height: 500px;
+            min-height: 100vh; /* 화면 높이에 맟춤 */
+            height: auto;
             /* 높이 설정 */
             background-color: var(--primary-color);
             display: flex;
@@ -150,11 +161,13 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 90%;
-            height: 90%;
+            width: 100%;
+            height: 100%;
             /* 실제 이미지를 쓸 경우 아래 background 속성을 변경하세요 */
             background: linear-gradient(rgba(233, 238, 229, 0.3), rgba(233, 238, 229, 0.3)), url('images/main.jpg') no-repeat center/cover;
-            background-size: cover;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
             z-index: 1;
         }
 
@@ -253,6 +266,37 @@
             text-align: center;
             border-top: 1px solid #eee;
         }
+.family-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.side {
+    width: 48%;
+}
+
+.parent {
+    margin: 15px 0;
+    font-size: 0.95rem;
+}
+
+.parent a {
+    margin-left: 8px;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+#calendar {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+#dday {
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--point-color);
+}
 
         /* 모바일이 아닌 화면 (PC 등)에서는 배경을 어둡게 처리하여 중앙 집중 효과 */
         @media (min-width: 481px) {
@@ -292,13 +336,13 @@
             <div class="main-img">
                 <!-- 실제 이미지가 있다면 CSS 배경이나 img 태그로 변경 가능 -->
             </div>
-            <div class="title-overlay reveal">
+        </header>
+        <!--1.5. 정보박스 -->
+         <div class="title-overlay reveal">
                 <!-- // 여기 수정: 신랑 신부 이름을 넣어주세요 -->
                 <h1>김희윤 & 김슬기</h1>
                 <span>서로의 인연이 되어<br>평생을 함께하려 합니다.</span>
             </div>
-        </header>
-
         <!-- 2. 인사말 섹션 -->
         <section class="greeting reveal">
             <h2>WEDDING INVITATION</h2>
@@ -316,10 +360,47 @@
                 저희의 새로운 출발을 빛내 주시면 감사드리겠습니다.
             </p>
             <br>
-            <p style="font-size: 1.1rem;">
-                <strong>김학수 · 윤미애</strong> 의 장남 <strong>김희윤</strong><br>
-                <strong>김준표 · 나영희</strong> 의 장녀 <strong>김슬기</strong>
-            </p>
+           <section class="family-info reveal">
+               <div style="margin-top:30px;">
+    <button id="contactBtn" class="contact-button">
+        혼주에게 연락하기
+    </button>
+</div>
+
+    <div class="family-grid">
+
+        <div class="side groom">
+            <h3>신랑측</h3>
+
+            <div class="parent">
+                아버지 김학수
+                <a href="tel:010-0000-0000">📞</a> <!-- 여기 수정 -->
+            </div>
+
+            <div class="parent">
+                어머니 윤미애
+                <a href="tel:010-0000-0000">📞</a> <!-- 여기 수정 -->
+            </div>
+        </div>
+
+        <div class="side bride">
+            <h3>신부측</h3>
+
+            <div class="parent">
+                아버지 김준표
+                <a href="tel:010-0000-0000">📞</a> <!-- 여기 수정 -->
+            </div>
+
+            <div class="parent">
+                어머니 나영희
+                <a href="tel:010-0000-0000">📞</a> <!-- 여기 수정 -->
+            </div>
+        </div>
+
+    </div>
+               
+</section>
+
         </section>
 
         <!-- 3. 예식 정보 섹션 -->
@@ -474,5 +555,6 @@
 </body>
 
 </html>
+
 
 
