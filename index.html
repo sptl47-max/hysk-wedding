@@ -46,54 +46,6 @@
                 opacity: 0;
             }
 
-            to {<!DOCTYPE html>
-<html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>모바일 청첩장</title>
-    <!-- 폰트 적용 (구글 폰트: Noto Serif KR - 감성적인 명조체) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
-    <meta name="theme-color" content="#ffeff3">
-    <link rel="manifest" href="manifest.json">
-    <style>
-        /* 
-         * [CSS 스타일 정의]
-         * 전체 디자인, 레이아웃, 애니메이션 효과를 담당합니다.
-        /* 변수 설정: 색상 변경 시 여기만 수정하면 전체 적용됨 */
-        :root {
-            --primary-color: #E9E9E5;
-            --point-color: #788374;
-            --text-color: #555;
-            --bg-white: #ffffff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Noto Serif KR', serif;
-            background-color: #f7f7f7;
-            color: var(--text-color);
-            line-height: 1.8;
-            overflow-x: hidden;
-        }
-
-        .main-img {
-            opacity: 0;
-            animation: fadeInMain 2s ease forwards;
-        }
-
-        @keyframes fadeInMain {
-            from {
-                opacity: 0;
-            }
-
             to {
                 opacity: 1;
             }
@@ -675,22 +627,6 @@
         }
 
         /* ===== 음악 버튼 ===== */
-        .music-toggle {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            width: 36px;
-            height: 36px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 16px;
-            cursor: pointer;
-            z-index: 5;
-        }
 
         .title-overlay-typewriter {
             display: inline-block;
@@ -778,7 +714,6 @@
                     <span class="title-overlay-typewriter">서로의 인연이 되어<br>평생을 함께하려 합니다.</span>
 
                 </div>
-                <div class="music-toggle" onclick="toggleMusic()">♪</div>
             </div>
         </header>
 
@@ -1258,6 +1193,3 @@
     </script>
 
 </body>
-
-
-</html>
