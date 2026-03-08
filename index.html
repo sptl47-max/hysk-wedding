@@ -967,42 +967,25 @@
             </div>
         </section>
 
-        <!-- 5. 갤러리 -->
-        <section class="gallery reveal">
-            <h2>갤러리</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="images/main.jpg" alt="웨딩사진1">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/background (4).jpg" alt="웨딩사진2">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/background (3).jpg" alt="웨딩사진3">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/background (1).jpg" alt="웨딩사진4">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/background (2).jpg" alt="웨딩사진5">
-                </div>
-            </div>
-        </section>
-        <div id="imageModal">
-            <div class="modal-close-btn" onclick="closeModal()">&times;</div>
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="images/main.jpg" alt="웨딩사진1"></div>
-                    <div class="swiper-slide"><img src="images/background (4).jpg" alt="웨딩사진2"></div>
-                    <div class="swiper-slide"><img src="images/background (3).jpg" alt="웨딩사진3"></div>
-                    <div class="swiper-slide"><img src="images/background (1).jpg" alt="웨딩사진4"></div>
-                    <div class="swiper-slide"><img src="images/background (2).jpg" alt="웨딩사진5"></div>
-                </div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-pagination"></div>
-            </div>
+       <!-- 5. 갤러리 -->
+<section class="gallery reveal">
+    <h2>갤러리</h2>
+    <div class="gallery-grid" id="galleryGrid">
+    </div>
+</section>
+
+<div id="imageModal">
+    <div class="modal-close-btn" onclick="closeModal()">&times;</div>
+
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper" id="swiperWrapper">
         </div>
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
 
         <!-- 푸터 -->
         <footer>
@@ -1193,6 +1176,36 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
+
+        const galleryGrid = document.getElementById("galleryGrid");
+const swiperWrapper = document.getElementById("swiperWrapper");
+
+for (let i = 1; i <= 40; i++) {
+
+    let imgPath = `images/background (${i}).jpg`;
+
+    // 갤러리 썸네일 생성
+    const galleryItem = document.createElement("div");
+    galleryItem.className = "gallery-item";
+
+    const img = document.createElement("img");
+    img.src = imgPath;
+    img.alt = `웨딩사진${i}`;
+
+    galleryItem.appendChild(img);
+    galleryGrid.appendChild(galleryItem);
+
+    // swiper 슬라이드 생성
+    const slide = document.createElement("div");
+    slide.className = "swiper-slide";
+
+    const slideImg = document.createElement("img");
+    slideImg.src = imgPath;
+    slideImg.alt = `웨딩사진${i}`;
+
+    slide.appendChild(slideImg);
+    swiperWrapper.appendChild(slide);
+}
         /* ===== 갤러리 슬라이더 로직 ===== */
         let swiper;
 
@@ -1286,4 +1299,5 @@
     </script>
 
 </body>
+
 
