@@ -935,9 +935,9 @@
                     <div class="account-row">
                         <div class="account-info">
                             <div class="account-name">부 김학수</div>
-                            <div class="account-number">국민 105-21-0700-544</div>
+                            <div class="account-number">케이뱅크 100-191-900152</div>
                         </div>
-                        <button class="copy-btn" onclick="copyAccount('국민 105-21-0700-544')">복사</button>
+                        <button class="copy-btn" onclick="copyAccount('케이뱅크 100-191-900152')">복사</button>
                     </div>
                 </div>
                 <div class="account-card">
@@ -1198,54 +1198,73 @@
         const swiperWrapper = document.getElementById("swiperWrapper");
         const loadMoreBtn = document.getElementById("loadMoreBtn");
 
-        const totalImages = 30;
+        const totalImages = 40;
         const firstVisible = 9;
 
-        function createImage(i) {
+        // 슬라이드 생성 (미리 40장 모두 생성하여 슬라이더 인덱스 불일치 해결)
+        function createSwiperSlide(i) {
             let imgPath = `images/background (${i}).jpg`;
-            // 1번 이미지만 예외적으로 main.jpg를 사용한다면 (사용자 의도에 따라 조정 가능)
             if (i === 1) imgPath = `images/main.jpg`;
 
-            // 갤러리 썸네일
+            const slide = document.createElement("div");
+            slide.className = "swiper-slide";
+
+            const slideImg = document.createElement("img");
+            // Native Lazy Loading 적용
+            slideImg.src = imgPath;
+            slideImg.loading = "lazy";
+            slideImg.alt = `웨딩사진${i}`;
+
+            // Swiper 11 Lazy Loading 프리로더 추가
+            const preloader = document.createElement("div");
+            preloader.className = "swiper-lazy-preloader";
+
+            slide.appendChild(slideImg);
+            slide.appendChild(preloader);
+            swiperWrapper.appendChild(slide);
+        }
+
+        // 썸네일 생성
+        function createThumbnail(i) {
+            let imgPath = `images/background (${i}).jpg`;
+            if (i === 1) imgPath = `images/main.jpg`;
+
             const galleryItem = document.createElement("div");
             galleryItem.className = "gallery-item";
 
             const img = document.createElement("img");
             img.src = imgPath;
+            img.loading = "lazy"; // 썸네일도 지연 로딩
             img.alt = `웨딩사진${i}`;
 
             galleryItem.appendChild(img);
             galleryGrid.appendChild(galleryItem);
 
-            // swiper 슬라이드
-            const slide = document.createElement("div");
-            slide.className = "swiper-slide";
-
-            const slideImg = document.createElement("img");
-            slideImg.src = imgPath;
-            slideImg.alt = `웨딩사진${i}`;
-
-            slide.appendChild(slideImg);
-            swiperWrapper.appendChild(slide);
-
-            // 클릭 이벤트 연결
+            // 클릭 이벤트: 전체 40장 중 해당 인덱스로 이동
             galleryItem.addEventListener("click", function () {
                 const modal = document.getElementById("imageModal");
                 modal.style.display = "flex";
                 document.body.style.overflow = 'hidden';
-                swiper.slideToLoop(i - 1, 0);
+                if (swiper) {
+                    swiper.slideToLoop(i - 1, 0);
+                }
             });
         }
 
-        // 초기 이미지 로드
-        for (let i = 1; i <= firstVisible; i++) {
-            createImage(i);
+        // 1. 모든 슬라이드를 먼저 생성 (사용자 요청: 9장만 보일 때도 전체 슬라이드 가능하도록)
+        for (let i = 1; i <= totalImages; i++) {
+            createSwiperSlide(i);
         }
 
-        // 더보기 버튼
+        // 2. 초기 9개 썸네일 노출
+        for (let i = 1; i <= firstVisible; i++) {
+            createThumbnail(i);
+        }
+
+        // 더보기 버튼: 나머지 썸네일 노출
         loadMoreBtn.addEventListener("click", function () {
             for (let i = firstVisible + 1; i <= totalImages; i++) {
-                createImage(i);
+                createThumbnail(i);
             }
             loadMoreBtn.style.display = "none";
         });
@@ -1254,9 +1273,10 @@
         let swiper;
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Swiper 초기화
+            // 모든 슬라이드가 생성된 후 Swiper 초기화
             swiper = new Swiper(".mySwiper", {
                 loop: true,
+                lazy: true, // Swiper lazy 기능 활성화
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
@@ -1266,10 +1286,7 @@
                     prevEl: ".swiper-button-prev",
                 },
             });
-
         });
-
-        // (기존 클릭 이벤트 로직은 createImage 내부로 이동됨)
 
 
         const audio = document.getElementById("bgm");
@@ -1333,7 +1350,3 @@
     </script>
 
 </body>
-
-
-
-
