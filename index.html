@@ -1279,17 +1279,25 @@
             galleryItem.addEventListener("click", function () {
                 const modal = document.getElementById("imageModal");
 
-                // 먼저 슬라이더를 해당 인덱스로 이동
-                if (swiper) {
-                    swiper.slideToLoop(i - 1, 0);
-                }
+               galleryItem.addEventListener("click", function () {
+    const modal = document.getElementById("imageModal");
 
-                // 그 다음 모달을 표시 (첫 이미지가 잠깐 나타나는 현상 방지)
-                modal.style.display = "flex";
-                document.body.style.overflow = 'hidden';
-            });
-        }
+    // 1. 모달을 띄우되, 눈에 보이지 않게 투명도를 0으로 설정
+    modal.style.opacity = "0";
+    modal.style.display = "flex";
+    document.body.style.overflow = 'hidden';
 
+    if (swiper) {
+        // 2. 모달이 화면에 배치된 후(display:flex) Swiper 크기 재계산 및 이동
+        swiper.update(); 
+        swiper.slideToLoop(i - 1, 0); // 0ms로 즉시 이동
+    }
+
+    // 3. 브라우저가 화면을 그릴 시간을 준 뒤 투명도 원상복구
+    requestAnimationFrame(() => {
+        modal.style.opacity = "1";
+    });
+});
         // 1. 모든 슬라이드를 먼저 생성 (사용자 요청: 9장만 보일 때도 전체 슬라이드 가능하도록)
         for (let i = 1; i <= totalImages; i++) {
             createSwiperSlide(i);
@@ -1318,6 +1326,8 @@
                 lazy: true,
                 // 전후 3장씩 미리 로드하여 스와이프 시 버퍼링 제로화
                 lazyPreloadPrevNext: 3,
+                observer: true,       // 요소의 변경을 감지하여 Swiper 자동 업데이트
+        observeParents: true, // 부모 요소의 변경(display 등)을 감지
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
@@ -1391,6 +1401,7 @@
     </script>
 
 </body>
+
 
 
 
